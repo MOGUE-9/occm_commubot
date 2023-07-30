@@ -5,37 +5,30 @@ from mastodon.streaming import StreamListener
 import re
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
-
+from dotenv import load_dotenv
+load_dotenv()
 
 # 구글시트 세팅
-
-
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/spreadsheets",
          "https://www.googleapis.com/auth/drive.file",
          "https://www.googleapis.com/auth/drive"]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name("api 키 json 파일명(확장명인 .json까지 붙여서)", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name(os.getenv('GOOGLE_KEYFILE'), scope)
 gc = gspread.authorize(creds)
-sh = gc.open_by_url('시트 url')
-search = sh.worksheet("조사")
+sh = gc.open_by_url(os.getenv('SHEET_URL'))
+search = sh.worksheet(os.getenv('MAIN_SHEET_NAME'))
 
-# 구글시트 세팅 끝
-
-# 마스토돈 계정 세팅
-
-BASE = '자동봇이 지내는 서버의 url'
+BASE = os.getenv('MASTODON_BASE')
 
 m = Mastodon(
-    client_id="클라이언트 키",
-    client_secret="클라이언트 비밀키",
-    access_token="액세스 토큰",
+    client_id=os.getenv('MASTODON_CLIENT_ID'),
+    client_secret=os.getenv('MASTODON_CLIENT_SECRET'),
+    access_token=os.getenv('MASTODON_ACCESS_TOKEN'),
     api_base_url=BASE
 )
 
 print('성공적으로 로그인 되었습니다.')
-
-# 마스토동 계정 세팅 끝
 
 CLEANR = re.compile('<.*?>')
 
@@ -44,12 +37,12 @@ def cleanhtml(raw_html):
   return cleantext
 
 class Listener(StreamListener):
-
     def on_notification(self, notification):
         if notification['type'] == 'mention':
             got = cleanhtml(notification['status']['content'])
 
-            if got.__contains__('[') is False or got.__contains__(']') is False:
+            # [] 미포함 
+            if got.__contains__('[') is False and got.__contains__(']') is False:
                 pass
 
             else:
