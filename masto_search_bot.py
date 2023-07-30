@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+import re
+import os
 from mastodon import Mastodon
 from mastodon.streaming import StreamListener
-import re
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2 import service_account
 import gspread
+from pyjosa.josa import Josa
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -14,7 +16,8 @@ scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive.file",
          "https://www.googleapis.com/auth/drive"]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name(os.getenv('GOOGLE_KEYFILE'), scope)
+creds = service_account.Credentials.from_service_account_file(os.getenv('GOOGLE_KEYFILE'))
+scoped_credentials = creds.with_scopes(scope)
 gc = gspread.authorize(creds)
 sh = gc.open_by_url(os.getenv('SHEET_URL'))
 search = sh.worksheet(os.getenv('MAIN_SHEET_NAME'))
@@ -33,8 +36,8 @@ print('성공적으로 로그인 되었습니다.')
 CLEANR = re.compile('<.*?>')
 
 def cleanhtml(raw_html):
-  cleantext = re.sub(CLEANR, '', raw_html)
-  return cleantext
+    cleantext = re.sub(CLEANR, '', raw_html)
+    return cleantext
 
 class Listener(StreamListener):
     def on_notification(self, notification):
@@ -46,6 +49,7 @@ class Listener(StreamListener):
                 pass
 
             else:
+                # TODO : 좀더 깔끔한 방식으로 변경하기
                 keyword = got[got.find('[')+1:got.find(']')]
                 
                 try:
@@ -69,10 +73,7 @@ class Listener(StreamListener):
                     else:
                         m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id= notification['status']['id'], visibility='private')
                 except AttributeError:
-                    m.status_post(f"@{notification['status']['account']['acct']} [{keyword}]는(은) 존재하지 않는 키워드입니다.\n만일 오류라고 판단되는 경우 운영진, 혹은 봇의 관리자에게 연락을 주세요.", in_reply_to_id=result, visibility='unlisted')
-    
-    def handle_heartbeat(self):
-        return super().handle_heartbeat()
+                    m.status_post(f"@{notification['status']['account']['acct']} [{keyword}]{Josa.get_josa(keyword, '은')} {os.getenv('MESSAGE_INVALID_KEYWORD')}", in_reply_to_id=result, visibility='unlisted')
 
 def main():
     m.stream_user(Listener())
