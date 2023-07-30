@@ -22,6 +22,7 @@ gc = gspread.authorize(creds)
 sh = gc.open_by_url(os.getenv('SHEET_URL'))
 search = sh.worksheet(os.getenv('MAIN_SHEET_NAME'))
 default_visibility = os.getenv('MASTODON_DEFAULT_VISIBILITY')
+admin_handle = os.getenv('BOT_ADMIN_HANDLE')
 
 BASE = os.getenv('MASTODON_BASE')
 
@@ -83,24 +84,25 @@ class Listener(StreamListener):
                         if result[2] is True:
                             # 방문한후 지문이 입력되어 있다면 사용, 없다면 방문여부 무관 기존 지문을 재사용한다.
                             if len(result) > 3:
-                                m.status_post(f"@{notification['status']['account']['acct']} {result[3]}", in_reply_to_id= notification['status']['id'], visibility=default_visibility)
+                                m.status_post(f"@{notification['status']['account']['acct']} {result[3]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                             else:
-                                print(f'방문된 후의 지문이 별도로 기입되어 있지 않습니다. 해당 키워드의 조사 후 지문을 기입해주세요: {keyword}')
-                                m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id= notification['status']['id'], visibility=default_visibility)
+                                m.status_post(f"@{admin_handle} 방문된 후의 지문이 누락된 키워드가 있습니다: {keyword}", visibility='private')
+                                m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                             return
                         else:
-                            m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id= notification['status']['id'], visibility=default_visibility)
+                            m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                             search.update_cell(look, 4, 'TRUE')
-                    except Exception as e:
-                        print(f'체크 관련 오류 발생: {e}')
+                    except Exception as exception_obj:
+                        m.status_post(f"@{admin_handle} 체크 관련 오류 발생: {exception_obj}", visibility='private')
                 # 이외(항시 가능)
                 else:
-                    m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id= notification['status']['id'], visibility=default_visibility)
+                    m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                     # HACK : 시트상 변화가 없다면 랜덤문구가 안나오기에 시트에 영향이 없는 체크박스를 체크했다 해제한다
                     search.update_cell(look, 4, 'TRUE')
                     search.update_cell(look, 4, 'FALSE')
             except AttributeError:
-                m.status_post(f"@{notification['status']['account']['acct']} [{keyword}]{Josa.get_josa(keyword, '은')} {os.getenv('MESSAGE_INVALID_KEYWORD')}", in_reply_to_id=result, visibility='unlisted')
+                m.status_post(f"@{notification['status']['account']['acct']} [{keyword}]{Josa.get_josa(keyword, '은')} {os.getenv('MESSAGE_INVALID_KEYWORD')}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                m.status_post(f"@{admin_handle} [{keyword}]{Josa.get_josa(keyword, '은')} {os.getenv('MESSAGE_ADM_INVALID_KEYWORD')}", visibility='private')
 
 def main():
     """
