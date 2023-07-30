@@ -64,7 +64,16 @@ def getkey(toot_body):
     return match.group(1) if match else None
 
 class Listener(StreamListener):
+    """
+    Mastodon 스트리밍 API의 이벤트를 받아 처리합니다.
+    """
     def on_notification(self, notification):
+        """
+        Mastodon 스트리밍 알림 이벤트 핸들러입니다. 언급 메시지를 처리하고 조사를 진행합니다.
+
+        Parameters:
+            notification (dict): Mastodon 알림 정보를 담은 딕셔너리
+        """
         if notification['type'] == 'mention':
             got = cleanhtml(notification['status']['content'])
             keyword = getkey(got)
