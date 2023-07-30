@@ -82,7 +82,7 @@ class Listener(StreamListener):
                     try:
                         if result[2] is True:
                             # 방문한후 지문이 입력되어 있다면 사용, 없다면 방문여부 무관 기존 지문을 재사용한다.
-                            if len(result) > 4:
+                            if len(result) > 3:
                                 m.status_post(f"@{notification['status']['account']['acct']} {result[3]}", in_reply_to_id= notification['status']['id'], visibility=default_visibility)
                             else:
                                 print(f'방문된 후의 지문이 별도로 기입되어 있지 않습니다. 해당 키워드의 조사 후 지문을 기입해주세요: {keyword}')
