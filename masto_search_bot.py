@@ -144,29 +144,29 @@ class Listener(StreamListener):
                         params['max_id'] = max_id
                     
                     m.status_post(f"@{notification['status']['account']['acct']} 활동이 정산되었습니다. 현재까지 작성한 글자수는 공미포 {letters}자입니다.", in_reply_to_id= notification['status']['id'], visibility=default_visibility)
-
-                # 조사 선택지인 경우
-                if result[1] is True:
-                    try:
-                        if result[2] is True:
-                            # 방문한후 지문이 입력되어 있다면 사용, 없다면 방문여부 무관 기존 지문을 재사용한다.
-                            if len(result) > 3:
-                                m.status_post(f"@{notification['status']['account']['acct']} {result[3]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
-                            else:
-                                m.status_post(f"@{admin_handle} 방문된 후의 지문이 누락된 키워드가 있습니다: {keyword}", visibility='private')
-                                m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
-                            return
-                        else:
-                            m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
-                            search.update_cell(look, 4, 'TRUE')
-                    except Exception as exception_obj:
-                        m.status_post(f"@{admin_handle} 체크 관련 오류 발생: {exception_obj}", visibility='private')
-                # 이외(항시 가능)
                 else:
-                    m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
-                    # HACK : 시트상 변화가 없다면 랜덤문구가 안나오기에 시트에 영향이 없는 체크박스를 체크했다 해제한다
-                    search.update_cell(look, 4, 'TRUE')
-                    search.update_cell(look, 4, 'FALSE')
+                    # 조사 선택지인 경우
+                    if result[1] is True:
+                        try:
+                            if result[2] is True:
+                                # 방문한후 지문이 입력되어 있다면 사용, 없다면 방문여부 무관 기존 지문을 재사용한다.
+                                if len(result) > 3:
+                                    m.status_post(f"@{notification['status']['account']['acct']} {result[3]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                                else:
+                                    m.status_post(f"@{admin_handle} 방문된 후의 지문이 누락된 키워드가 있습니다: {keyword}", visibility='private')
+                                    m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                                return
+                            else:
+                                m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                                search.update_cell(look, 4, 'TRUE')
+                        except Exception as exception_obj:
+                            m.status_post(f"@{admin_handle} 체크 관련 오류 발생: {exception_obj}", visibility='private')
+                    # 이외(항시 가능)
+                    else:
+                        m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                        # HACK : 시트상 변화가 없다면 랜덤문구가 안나오기에 시트에 영향이 없는 체크박스를 체크했다 해제한다
+                        search.update_cell(look, 4, 'TRUE')
+                        search.update_cell(look, 4, 'FALSE')
             except AttributeError:
                 m.status_post(f"@{notification['status']['account']['acct']} [{keyword}]{Josa.get_josa(keyword, '은')} {os.getenv('MESSAGE_INVALID_KEYWORD')}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 m.status_post(f"@{admin_handle} [{keyword}]{Josa.get_josa(keyword, '은')} {os.getenv('MESSAGE_ADM_INVALID_KEYWORD')}", visibility='private')
