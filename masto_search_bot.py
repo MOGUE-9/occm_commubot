@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import re
 import os
+import requests
+import json
 from mastodon import Mastodon
 from mastodon.streaming import StreamListener
 from google.oauth2 import service_account
@@ -36,6 +38,21 @@ m = Mastodon(
 print('성공적으로 로그인 되었습니다.')
 
 CLEANR = re.compile('<.*?>')
+SEC_CLEANR = re.compile('\B@\w+')
+
+def gettext(raw_html):
+    """
+    주어진 문자열에서 HTML 태그 및 멘션을 제거하고 정제된 텍스트를 반환합니다.
+
+    Parameters:
+        raw_html (str): HTML 태그가 포함된 원본 문자열
+
+    Returns:
+        str: HTML 태그 및 멘션이 제거된 정제된 텍스트
+    """
+    cleantext = re.sub(CLEANR, '', raw_html)
+    cleantext = re.sub(SEC_CLEANR, '', cleantext)
+    return cleantext
 
 def cleanhtml(raw_html):
     """
@@ -86,6 +103,47 @@ class Listener(StreamListener):
                 # 조사 시트에서 키워드를 찾는다
                 look = search.find(keyword, in_column=1, case_sensitive=True).row
                 result = search.get(f"R{look}C2:R{look}C5", value_render_option="UNFORMATTED_VALUE")[0]
+
+                # 정산 요청 감지시(기본 문구를 %정산%으로 입력)
+                if result[0] is "%정산%":
+                    print('정산 요청 감지')
+                    letters = 0
+                    URL = f"{BASE}/api/v1/accounts/{notification['status']['account']['id']}/statuses"
+                    bf_last = None
+
+                    while True:
+                        params = {
+                            'limit': 40
+                        }
+
+                        fetched = requests.get(URL, params=params,timeout=60)
+                        fetched = json.loads(fetched.text)
+
+                        if len(fetched) == 0:
+                            break
+
+                        for i in fetched:
+                            i = gettext(i['content'])
+                            letters += len(i)
+
+                        try:
+                            last = fetched[-1]
+                            max_id = last['id']
+                            last = last['created_at']
+
+                            if bf_last is None:
+                                bf_last = last
+
+                            else:
+                                if bf_last <= last:
+                                    print('끝에 도달했습니다')
+                                    break
+                        except IndexError:
+                            print('끝에 도달했습니다')
+                            break
+                        params['max_id'] = max_id
+                    
+                    m.status_post(f"@{notification['status']['account']['acct']} 활동이 정산되었습니다. 현재까지 작성한 글자수는 공미포 {letters}자입니다.", in_reply_to_id= notification['status']['id'], visibility=default_visibility)
 
                 # 조사 선택지인 경우
                 if result[1] is True:
