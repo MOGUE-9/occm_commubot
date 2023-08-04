@@ -105,7 +105,7 @@ class Listener(StreamListener):
                 result = search.get(f"R{look}C2:R{look}C5", value_render_option="UNFORMATTED_VALUE")[0]
 
                 # 정산 요청 감지시(기본 문구를 %정산%으로 입력)
-                if result[0] is "%정산%":
+                if result[0] == "%정산%":
                     print('정산 요청 감지')
                     letters = 0
                     URL = f"{BASE}/api/v1/accounts/{notification['status']['account']['id']}/statuses"
