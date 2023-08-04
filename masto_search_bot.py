@@ -16,7 +16,7 @@ scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive.file",
          "https://www.googleapis.com/auth/drive"]
 
-creds = service_account.Credentials.from_service_account_file(os.getenv('GOOGLE_KEYFILE'))
+creds = service_account.Credentials.from_service_account_file(f'{os.getcwd()}/key.json')
 creds = creds.with_scopes(scope)
 gc = gspread.authorize(creds)
 sh = gc.open_by_url(os.getenv('SHEET_URL'))
