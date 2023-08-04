@@ -143,7 +143,7 @@ class Listener(StreamListener):
                             break
                         params['max_id'] = max_id
                     
-                    m.status_post(f"@{notification['status']['account']['acct']} 활동이 정산되었습니다. 현재까지 작성한 글자수는 공미포 {letters}자입니다.", in_reply_to_id= notification['status']['id'], visibility=default_visibility)
+                    m.status_post(f"@{notification['status']['account']['acct']} 활동이 정산되었습니다. 현재까지 작성한 글자수는 공미포 {letters}자입니다.", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 else:
                     # 조사 선택지인 경우
                     if result[1] is True:
