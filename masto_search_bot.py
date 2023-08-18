@@ -25,6 +25,7 @@ sh = gc.open_by_url(os.getenv('SHEET_URL'))
 search = sh.worksheet(os.getenv('MAIN_SHEET_NAME'))
 default_visibility = os.getenv('MASTODON_DEFAULT_VISIBILITY')
 admin_handle = os.getenv('BOT_ADMIN_HANDLE')
+tag_admin = os.getenv('BOT_TAG_ADMIN') == 'true'
 
 BASE = os.getenv('MASTODON_BASE')
 
@@ -170,7 +171,8 @@ class Listener(StreamListener):
                         search.update_cell(look, 4, 'FALSE')
             except AttributeError:
                 m.status_post(f"@{notification['status']['account']['acct']} [{keyword}]{Josa.get_josa(keyword, '은')} {os.getenv('MESSAGE_INVALID_KEYWORD')}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
-                m.status_post(f"@{admin_handle} {os.getenv('MESSAGE_ADM_INVALID_KEYWORD_PRE')} {keyword}{Josa.get_josa(keyword, '이가')} {os.getenv('MESSAGE_ADM_INVALID_KEYWORD_AFR')}", visibility='private')
+                if tag_admin:
+                    m.status_post(f"@{admin_handle} {os.getenv('MESSAGE_ADM_INVALID_KEYWORD_PRE')} {keyword}{Josa.get_josa(keyword, '이가')} {os.getenv('MESSAGE_ADM_INVALID_KEYWORD_AFR')}", visibility='private')
 
 def main():
     """
