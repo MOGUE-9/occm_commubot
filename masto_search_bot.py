@@ -35,7 +35,7 @@ m = Mastodon(
     access_token=os.getenv('MASTODON_ACCESS_TOKEN'),
     api_base_url=BASE
 )
-bot = Mastodon.me()
+bot = m.me()
 
 print('성공적으로 로그인 되었습니다.')
 
