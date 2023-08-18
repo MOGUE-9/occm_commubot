@@ -37,7 +37,7 @@ m = Mastodon(
 )
 bot = m.me()
 
-print('성공적으로 로그인 되었습니다.')
+print(f"성공적으로 계정 {bot.username}으로 로그인 되었습니다.")
 
 CLEANR = re.compile('<.*?>')
 SEC_CLEANR = re.compile('\B@\w+')
