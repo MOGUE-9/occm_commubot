@@ -34,6 +34,7 @@ m = Mastodon(
     access_token=os.getenv('MASTODON_ACCESS_TOKEN'),
     api_base_url=BASE
 )
+bot = Mastodon.me()
 
 print('성공적으로 로그인 되었습니다.')
 
@@ -153,14 +154,14 @@ class Listener(StreamListener):
                                 if len(result) > 3:
                                     m.status_post(f"@{notification['status']['account']['acct']} {result[3]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                                 else:
-                                    m.status_post(f"@{admin_handle} 방문된 후의 지문이 누락된 키워드가 있습니다: {keyword}", visibility='private')
+                                    m.status_post(f"@{admin_handle} [체크 필요] 키워드 {keyword}의 방문된 후의 지문이 누락되었습니다. 조사전후 차이가 불필요한 경우 \"조사 유무 확인?\" 부분 체크를 해제해주세요.", visibility='private')
                                     m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                                 return
                             else:
                                 m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                                 search.update_cell(look, 4, 'TRUE')
                         except Exception as exception_obj:
-                            m.status_post(f"@{admin_handle} 체크 관련 오류 발생: {exception_obj}", visibility='private')
+                            m.status_post(f"@notice@occm.cc 봇 아이디 {bot['username']}의 체크 관련 오류 발생: {exception_obj}", visibility='private')
                     # 이외(항시 가능)
                     else:
                         m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
@@ -169,7 +170,7 @@ class Listener(StreamListener):
                         search.update_cell(look, 4, 'FALSE')
             except AttributeError:
                 m.status_post(f"@{notification['status']['account']['acct']} [{keyword}]{Josa.get_josa(keyword, '은')} {os.getenv('MESSAGE_INVALID_KEYWORD')}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
-                m.status_post(f"@{admin_handle} [{keyword}]{Josa.get_josa(keyword, '은')} {os.getenv('MESSAGE_ADM_INVALID_KEYWORD')}", visibility='private')
+                m.status_post(f"@{admin_handle} {os.getenv('MESSAGE_ADM_INVALID_KEYWORD_PRE')} {keyword}{Josa.get_josa(keyword, '이가')} {os.getenv('MESSAGE_ADM_INVALID_KEYWORD_AFR')}", visibility='private')
 
 def main():
     """
