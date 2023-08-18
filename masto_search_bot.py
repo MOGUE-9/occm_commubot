@@ -108,7 +108,7 @@ class Listener(StreamListener):
 
                 # 정산 요청 감지시(기본 문구를 %정산%으로 입력)
                 if result[0] == "%정산%":
-                    print('정산 요청 감지')
+                    print(f"유저 {notification['status']['account']['acct']}의 정산 요청 감지")
                     letters = 0
                     URL = f"{BASE}/api/v1/accounts/{notification['status']['account']['id']}/statuses"
                     bf_last = None
@@ -150,6 +150,7 @@ class Listener(StreamListener):
                     # 조사 선택지인 경우
                     if result[1] is True:
                         try:
+                            print(f"유저 {notification['status']['account']['acct']} 조건조사 진행 - {notification['status']['id']}")
                             if result[2] is True:
                                 # 방문한후 지문이 입력되어 있다면 사용, 없다면 방문여부 무관 기존 지문을 재사용한다.
                                 if len(result) > 3:
@@ -165,6 +166,7 @@ class Listener(StreamListener):
                             m.status_post(f"@notice@occm.cc 봇 아이디 {bot['username']}의 체크 관련 오류 발생: {exception_obj}", visibility='private')
                     # 이외(항시 가능)
                     else:
+                        print(f"유저 {notification['status']['account']['acct']} 상시조사 진행 - {notification['status']['id']}")
                         m.status_post(f"@{notification['status']['account']['acct']} {result[0]}", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                         # HACK : 시트상 변화가 없다면 랜덤문구가 안나오기에 시트에 영향이 없는 체크박스를 체크했다 해제한다
                         search.update_cell(look, 4, 'TRUE')
