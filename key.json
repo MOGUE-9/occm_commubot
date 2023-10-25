@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "envision2023",
+  "private_key_id": "cd32a93127178954c16d32b26aecf2268fdc882a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCzhI6eM6Pc99fo\nMafWkPHBp2dXnIALEYycGcwCwfcpAWEIRknt+FhgLAqMEM/GzjcooBApmff8P2y7\nVdGYC+0Jnn1WpuS82ROf1SKz/Jq1tl2ld3Tpx6F1rMv+a7G6exHSJGgaoUldIOmS\n0SuTrVuiEpA4Vt7KvKMROHH5RI9toY0vDyoxMEOqg5eANuYD7X0VXBmbjoc8xxSu\nPf1sZXkhknhxWR1KBGdxLRTwhrUFMGAdcn+LK35IrD75kDW6FTQECco3g4N9gX8a\nVi9muZmNBTcTqbeWLE4VZFESFGjW6UXQcoLPEtJkfL/gvp63naeZQKFjg/OYW1vP\nK3b2ff45AgMBAAECggEAKO8xFiHwW5KoSOoJu4ORnPbvOasWB3AY//9h5b8U/OSz\nm49rjDf07vkb7pRmzI55RWo6RUI2qe5MfOs0v9b4Vhktu3SS8/0L3IZdQ212Wbkb\n4X87yZMb3hlo6rrj7AHkLmbe1jOw5ut6V2Aa77G4E1zoRfCJHPGmvWaBlrVrfzPU\n33kYLZaaXcRmgUdQffxp5qdCwU9NNhkzXT8I0T0jAJUaN9zqpSSE38nTfSbBlyS2\nzp4WTqcMlUR0zrniyKWB9Tt9WKu3d4j+huRhUp74LX+QsipAAYX1foEnsSL7yDPv\nguiwG3NogJId+RxGxZIpHOwV4Ljyl6hbgUAFQH8jgQKBgQDyJ8FbVgzDvA2WZyR0\n98ijPLs11YnwA/4wO3oi78RTZ23jio7d/oT9Qh+9iJFX44jTI5KcptS/fo24mvYk\nDyUxWBtDhu3DdAPH8p4bzAZXZKxuuqafru3NTxGPzXZiSEBpltKfb1YPZcxPi2rL\nFy3KFiRFdLCCvfVhFomahR2JjwKBgQC9yAYjtZv2iZ3yv3tjQIxSZKsk3C8ZmJs7\nOXBtHsnqA7v35mTKf1Cl3JLEX9WXRkZIq6zSOnLIuEkcPgHsWR3gOfQ842kSNVZq\nr54r4Ny8MCmrieL81z6oKszklhz7ZuvhUMggswAevzFJOF9XKIG0I+mawRKy5f8k\nN+L7riZHtwKBgE2MpcOWXyggBUnxZh9/auW8AUhQRohy/uh7Y7Xkiz8alHqWWQKH\nDBf/ISMVpVY8LAlSDxXT57Yb1U8VcVZC82pGCRUrFOHPOZbDABdu02kReJdNdycU\nYlupwroG1q7K7LXj8zfT8/+iXjfrMhwwJB3f0WXc5No582dQTGkL0FXJAoGAb/FJ\ndczM5zo7eZFq9ZuAaaVJsh9ShPWYMvHpl+P+U9PKDyrOLwe0CXG2/LBOq8Fe+cSR\n1xt002KodUk6FzBlx/pHT5cQRhZCGAHo+ZbUfQinu7BEvME2Cznby8Wj6MLHxgrB\nUVBkdL5wEvF2g1G4WAqK46aZIf86ZSG1+KC7obcCgYB+A+bk+0Jp6sy4yajV1ZFg\nmnjz0bkXPrtX6dBgWjm5NGsYgJEGV6uEznJQ2eXGEZ1hiDHOAsPZx0b5xBfJSL5G\nxbuMdsaP9585Vl5lzy8/aW+TXLHCRwj5YoOGibBM9rjLPUttYcEY6vSjzAHoR5se\nwDK+8FEAKyv6rMet9QWGMw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "envision2023@envision2023.iam.gserviceaccount.com",
+  "client_id": "109499637507301671987",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/envision2023%40envision2023.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
