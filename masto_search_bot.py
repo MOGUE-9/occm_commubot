@@ -21,18 +21,18 @@ scope = ["https://spreadsheets.google.com/feeds",
 creds = service_account.Credentials.from_service_account_file(f'{os.getcwd()}/key.json')
 creds = creds.with_scopes(scope)
 gc = gspread.authorize(creds)
-sh = gc.open_by_url(os.getenv('SHEET_URL'))
-search = sh.worksheet(os.getenv('MAIN_SHEET_NAME'))
-default_visibility = os.getenv('MASTODON_DEFAULT_VISIBILITY')
-admin_handle = os.getenv('BOT_ADMIN_HANDLE')
-tag_admin = os.getenv('BOT_TAG_ADMIN') == 'true'
+sh = gc.open_by_url(os.getenv('https://docs.google.com/spreadsheets/d/1fHDl8hJPwbEOeiBRfD7w3AV6UwbOC_d3Pma5J29dmnA/edit?usp=sharing'))
+search = sh.worksheet(os.getenv('조사'))
+default_visibility = os.getenv('private')
+#admin_handle = os.getenv('BOT_ADMIN_HANDLE') #어디에 들어가는 기능인지 모르겠어서 주석처리
+#tag_admin = os.getenv('BOT_TAG_ADMIN') == 'true' # 22
 
-BASE = os.getenv('MASTODON_BASE')
+BASE = os.getenv('https://occm.cc/')
 
 m = Mastodon(
-    client_id=os.getenv('MASTODON_CLIENT_ID'),
-    client_secret=os.getenv('MASTODON_CLIENT_SECRET'),
-    access_token=os.getenv('MASTODON_ACCESS_TOKEN'),
+    client_id=os.getenv('1jTdRbpw5YsK-CvSL3pWcAxKJL258sCP53ms-rLnnrM'),
+    client_secret=os.getenv('1icx-lf6qK6hOVTuuN9BhVQpbKG6fbYnoor6FuLVkQo'),
+    access_token=os.getenv('qSYDVbVsHOyfFK2_-1X0UTNypTpo3B98HiuewcP2y3U'),
     api_base_url=BASE
 )
 bot = m.me()
